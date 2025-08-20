@@ -26,9 +26,14 @@ RUN pip install --upgrade pip \
 	&& pip install -r requirements.txt
 
 ###########################
-# Copy application source
+# Copy application source (includes start.sh)
 ###########################
 COPY . .
+
+###########################
+# Ensure start.sh is executable before dropping privileges
+###########################
+RUN chmod +x /app/start.sh
 
 ###########################
 # Non-root user
@@ -46,7 +51,4 @@ HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD curl -fsS http://127.0.0
 ###########################
 # Entrypoint
 ###########################
-COPY start.sh /app/start.sh
-RUN chmod +x /app/start.sh
-
 CMD ["/app/start.sh"]
