@@ -63,6 +63,8 @@ Remote_Instance = config.Remote_Instance
 if MYSTERIUS == "1":
     from Src.API.cool import cool
 DDL_DOMAIN = config.DDL_DOMAIN
+logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s', force=True)
+logger = logging.getLogger(__name__)
 app = FastAPI()
 app.include_router(m3u8_clone)
 limiter = Limiter(key_func=get_remote_address)
@@ -141,6 +143,10 @@ def root(request: Request):
     instance_url = f"{scheme}://{request.url.netloc}"
     html_content = HTML.replace("{instance_url}", instance_url)
     return html_content
+
+@app.get('/healthz')
+def healthz():
+    return {"status": "ok"}
 async def addon_catalog(type: str, id: str, genre: str = None):
     if type != "tv":
         raise HTTPException(status_code=404)
