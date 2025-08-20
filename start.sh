@@ -26,4 +26,11 @@ PY
 fi
 
 # Start the FastAPI app via uvicorn (module: run:app)
-exec uvicorn run:app --host 0.0.0.0 --port "$PORT_ENV" --log-level info
+ACCESS_LOG=${ACCESS_LOG:-1}
+LOG_LEVEL=${LOG_LEVEL:-info}
+if [ "$ACCESS_LOG" = "1" ]; then
+  ACCESS_FLAG="--access-log"
+else
+  ACCESS_FLAG="--no-access-log"
+fi
+exec uvicorn run:app --host 0.0.0.0 --port "$PORT_ENV" --log-level "$LOG_LEVEL" $ACCESS_FLAG --proxy-headers --forwarded-allow-ips="*"
