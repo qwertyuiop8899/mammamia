@@ -83,7 +83,7 @@
    "General":{
        "load_env": "0",
        "HOST": "0.0.0.0",
-       "PORT": "8080",
+    "PORT": "8081",
        "Name": "MammaMia",
        "Icon": "🍕️",
        "Public_Instance": "0",
