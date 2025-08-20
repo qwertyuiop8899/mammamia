@@ -7,7 +7,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 	PYTHONUNBUFFERED=1 \
 	PIP_NO_CACHE_DIR=1 \
 	PATH="/home/appuser/.local/bin:$PATH" \
-	PORT=8080
+	PORT=8081
 
 WORKDIR /app
 
@@ -41,12 +41,12 @@ RUN chmod +x /app/start.sh
 RUN useradd -m appuser && chown -R appuser:appuser /app
 USER appuser
 
-EXPOSE 8080
+EXPOSE 8081
 
 ###########################
-# Healthcheck (FastAPI root -> HTML)
+# Healthcheck (FastAPI /healthz)
 ###########################
-HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD curl -fsS http://127.0.0.1:${PORT:-8080}/manifest.json || curl -fsS http://127.0.0.1:${PORT:-8080}/ || exit 1
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD curl -fsS http://127.0.0.1:${PORT:-8081}/healthz || exit 1
 
 ###########################
 # Entrypoint
