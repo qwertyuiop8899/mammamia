@@ -13,13 +13,14 @@ print(data.get('General',{}).get('PORT',''))
 PY
   )
   if [ "$CURRENT_CFG_PORT" != "$PORT_ENV" ] && [ -n "$CURRENT_CFG_PORT" ]; then
-    python - <<PY
-import json
+    APP_PORT="$PORT_ENV" python - <<'PY'
+import json, os
 fn='config.json'
 with open(fn) as f: d=json.load(f)
-d.setdefault('General',{})['PORT']=str(${PORT_ENV})
+port=os.environ.get('APP_PORT') or '8080'
+d.setdefault('General',{})['PORT']=str(port)
 with open(fn,'w') as f: json.dump(d,f,indent=4)
-print(f"Updated config.json PORT -> {PORT_ENV}")
+print(f"Updated config.json PORT -> {port}")
 PY
   fi
 fi
