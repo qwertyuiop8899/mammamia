@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Allow dynamic port override (BeamUP / Render / Heroku style) default 8080
-PORT_ENV="${PORT:-8080}"
+PORT_ENV="${PORT:-8081}"
 # Ensure config port matches runtime if different
 if [ -f config.json ]; then
   CURRENT_CFG_PORT=$(python - <<'PY'
@@ -25,6 +25,7 @@ PY
   fi
 fi
 
+echo "[start.sh] Launching MammaMia addon on port ${PORT_ENV}" >&2
 # Start the FastAPI app via uvicorn (module: run:app)
 ACCESS_LOG=${ACCESS_LOG:-1}
 LOG_LEVEL=${LOG_LEVEL:-info}
